@@ -19,7 +19,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-blue-600 text-white p-4 shadow-md">
+    <header className="bg-primaryBlue text-white p-4 shadow-md">
       <div className="container mx-auto flex flex-col items-center md:flex-row md:justify-between">
         {/* Logo (image uniquement, taille doublée) */}
         <div className="mb-2 md:mb-0">
@@ -40,7 +40,7 @@ function Header() {
           <input
             type="text"
             placeholder="Rechercher des produits..."
-            className="w-full p-2 rounded-l-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 rounded-l-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -83,7 +83,7 @@ function Header() {
         <input
           type="text"
           placeholder="Rechercher des produits..."
-          className="w-full p-2 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full p-2 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
