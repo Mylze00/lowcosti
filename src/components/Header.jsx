@@ -1,23 +1,61 @@
 // src/components/Header.jsx
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User } from 'lucide-react';
 import { Menu, Transition } from '@headlessui/react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase'; // 🔁 Assure-toi que l'import est correct
 
 function Header() {
   const { getCartItemCount } = useCart();
   const { user, logout } = useAuth();
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+
   const navigate = useNavigate();
+
+  // 🔄 Récupère les produits au chargement
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const querySnapshot = await getDocs(collection(db, 'products'));
+      const products = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setAllProducts(products);
+    };
+    fetchProducts();
+  }, []);
+
+  // 🎯 Suggestions dynamiques
+  useEffect(() => {
+    if (searchTerm.length > 0) {
+      const filtered = allProducts.filter(product =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSuggestions(filtered.slice(0, 5)); // limite à 5 suggestions
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchTerm, allProducts]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/?q=${searchTerm.trim()}`);
+      setShowSearch(false);
     }
+  };
+
+  const handleSuggestionClick = (title) => {
+    setSearchTerm(title);
+    navigate(`/?q=${title}`);
+    setSuggestions([]);
+    setShowSearch(false);
   };
 
   const handleLogout = async () => {
@@ -26,36 +64,55 @@ function Header() {
   };
 
   return (
-    <header className="bg-primaryBlue text-white p-4 shadow-md">
+    <header className="bg-primaryBlue text-white p-4 shadow-md relative z-50">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo à gauche */}
         <Link to="/" className="flex items-center">
           <img src="/images/logo.png" alt="LowCost RDC" className="h-14 w-auto" />
         </Link>
 
-        {/* Barre de recherche (icône uniquement) */}
+        {/* Icônes à droite */}
         <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setShowSearch(!showSearch)}
-            className="hover:text-blue-200 transition"
-            aria-label="Rechercher"
-          >
-            <Search className="h-6 w-6" />
-          </button>
+          {/* Recherche avec suggestions */}
+          <div className="relative">
+            <button
+              onClick={() => setShowSearch(!showSearch)}
+              className="hover:text-blue-200 transition"
+              aria-label="Rechercher"
+            >
+              <Search className="h-6 w-6" />
+            </button>
 
-          {showSearch && (
-            <form onSubmit={handleSearchSubmit} className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-white rounded shadow p-2 z-50">
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="border text-black px-4 py-1 rounded focus:outline-none"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </form>
-          )}
+            {showSearch && (
+              <form
+                onSubmit={handleSearchSubmit}
+                className="absolute right-0 mt-2 bg-white shadow-lg rounded-md p-2 w-72 z-50"
+              >
+                <input
+                  type="text"
+                  placeholder="Rechercher un produit..."
+                  className="w-full px-3 py-2 border rounded text-black focus:outline-none"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {suggestions.length > 0 && (
+                  <ul className="mt-2 border rounded text-black max-h-48 overflow-y-auto">
+                    {suggestions.map(product => (
+                      <li
+                        key={product.id}
+                        onClick={() => handleSuggestionClick(product.title)}
+                        className="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                      >
+                        {product.title}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </form>
+            )}
+          </div>
 
-          {/* Icône Panier */}
+          {/* Panier */}
           <Link to="/cart" className="relative hover:text-blue-200">
             <ShoppingCart className="h-6 w-6" />
             {getCartItemCount() > 0 && (
@@ -65,7 +122,7 @@ function Header() {
             )}
           </Link>
 
-          {/* Icône Utilisateur ou Menu déroulant */}
+          {/* Menu utilisateur ou Connexion */}
           {user ? (
             <Menu as="div" className="relative inline-block text-left">
               <Menu.Button className="hover:text-blue-200">
