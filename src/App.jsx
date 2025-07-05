@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import HeroCarousel from './components/HeroCarousel';
 import CategoryNavigation from './components/CategoryNavigation';
-import AuctionOfferZone from './components/AuctionOfferZone';
+import VenteShow from './components/VenteShow'; // ✅ Nouveau composant renommé
 import ProductGrid from './components/ProductGrid';
 import BottomNavigationBar from './components/BottomNavigationBar';
 import FooterInfoSection from './components/FooterInfoSection';
@@ -15,11 +15,11 @@ import ProfilePage from './pages/ProfilePage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/CategoryPage';
-import AddProductPage from './pages/AddProductPage'; // ✅ Nouvelle page
+import AddProductPage from './pages/AddProductPage';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
-import PrivateRoute from './routes/PrivateRoute'; // ✅ Protection
+import PrivateRoute from './routes/PrivateRoute';
 
 import './App.css';
 
@@ -28,7 +28,7 @@ function HomePage() {
     <>
       <HeroCarousel />
       <CategoryNavigation />
-      <AuctionOfferZone />
+      <VenteShow /> {/* ✅ Affiche plusieurs produits en enchère horizontalement */}
       <ProductGrid />
     </>
   );
