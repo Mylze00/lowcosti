@@ -1,9 +1,12 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { useNavigate, Link } from 'react-router-dom';
+import { PlusCircle, ShoppingCart } from 'lucide-react';
 
 function ProfilePage() {
   const { user, logout } = useAuth();
+  const { cartItems } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -20,8 +23,8 @@ function ProfilePage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white shadow-md rounded-md mt-6">
-      <h2 className="text-xl font-bold mb-4 text-blue-600">Mon profil</h2>
+    <div className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md mt-6 space-y-6">
+      <h2 className="text-xl font-bold text-blue-600">Mon profil</h2>
 
       <div className="flex flex-col items-center space-y-4">
         {user.photoURL && (
@@ -36,12 +39,42 @@ function ProfilePage() {
           <p className="text-gray-600">{user.email || 'Téléphone : Non défini'}</p>
         </div>
 
+        {/* 🔵 Ajouter un produit à vendre */}
+        <Link
+          to="/add-product"
+          className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+        >
+          <PlusCircle className="w-5 h-5" />
+          <span>Mettre un produit en vente</span>
+        </Link>
+
+        {/* 🔴 Bouton Déconnexion */}
         <button
           onClick={handleLogout}
-          className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition"
         >
           Déconnexion
         </button>
+      </div>
+
+      {/* 🛒 Liste des articles dans le panier */}
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold text-blue-700 mb-2 flex items-center gap-2">
+          <ShoppingCart className="w-5 h-5" />
+          Articles dans votre panier
+        </h3>
+        {cartItems.length === 0 ? (
+          <p className="text-gray-600">Votre panier est vide.</p>
+        ) : (
+          <ul className="space-y-2">
+            {cartItems.map((item, index) => (
+              <li key={index} className="p-2 border rounded flex justify-between">
+                <span>{item.title}</span>
+                <span className="text-blue-600 font-semibold">{item.price} $</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
