@@ -2,14 +2,16 @@
 export default {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // Scan tous les fichiers JS/TS/JSX/TSX dans src
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       colors: {
-        primaryBlue: '#084f87', // ✅ Couleur personnalisée ajoutée
+        primaryBlue: '#084f87',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide'), // ✅ Ajout du plugin
+  ],
 };
