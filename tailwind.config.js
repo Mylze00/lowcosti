@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}", // Scan tous les fichiers JS/TS/JSX/TSX dans src
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primaryBlue: '#084f87', // ✅ Couleur personnalisée ajoutée
+      },
+    },
   },
   plugins: [],
 };
