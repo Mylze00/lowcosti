@@ -7,15 +7,17 @@ import CategoryNavigation from './components/CategoryNavigation';
 import AuctionOfferZone from './components/AuctionOfferZone';
 import ProductGrid from './components/ProductGrid';
 import BottomNavigationBar from './components/BottomNavigationBar';
-import FooterInfoSection from './components/FooterInfoSection'; // Section personnalisée ajoutée
+import FooterInfoSection from './components/FooterInfoSection';
 
-import { CartProvider } from './context/CartContext';
-
-import './App.css';
-
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage'; // ✅ Ajout de la page d'inscription
+import ProfilePage from './pages/ProfilePage'; // ✅ Ajout de la page profil
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/CategoryPage';
+
+import { CartProvider } from './context/CartContext';
+import './App.css';
 
 function HomePage() {
   return (
@@ -37,16 +39,17 @@ function App() {
 
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} /> {/* ✅ Nouvelle route */}
+            <Route path="/profile" element={<ProfilePage />} /> {/* ✅ Nouvelle route */}
             <Route path="/product/:id" element={<ProductDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/categories/:categoryName" element={<CategoryPage />} />
             <Route path="/categories" element={<CategoryPage />} />
           </Routes>
 
-          {/* ✅ Section personnalisée en bas de page */}
           <FooterInfoSection />
 
-          {/* ✅ Footer classique */}
           <footer className="py-8 text-center text-gray-500 text-sm mt-auto">
             © 2025 Mon Lowcosti RDC. Tous droits réservés.
           </footer>
