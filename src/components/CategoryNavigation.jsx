@@ -1,13 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Smartphone, Shirt, Tv, Home } from 'lucide-react'; // Icônes lucide-react
+import {
+  Smartphone,
+  Shirt,
+  Tv,
+  Home,
+  Tag,       // 🆕 Pour "Occasion"
+  LockKeyhole // 🆕 Pour "Gage"
+} from 'lucide-react';
 
 const categories = [
   { id: 'phones', name: 'Téléphones', icon: Smartphone },
   { id: 'fashion', name: 'Mode', icon: Shirt },
   { id: 'electronics', name: 'Électronique', icon: Tv },
   { id: 'home', name: 'Maison', icon: Home },
-  // ➕ Ajoute d'autres catégories ici si nécessaire
+  { id: 'occasion', name: 'Occasion', icon: Tag },
+  { id: 'gage', name: 'Gage', icon: LockKeyhole },
 ];
 
 function CategoryNavigation() {
