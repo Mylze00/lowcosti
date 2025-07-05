@@ -1,3 +1,4 @@
+// src/components/VenteShow.jsx
 import React, { useState, useEffect } from 'react';
 import { Clock3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -88,7 +89,7 @@ function VenteShow() {
                   <img
                     src={auction.imageUrl}
                     alt={auction.productName}
-                    className="h-full w-auto object-contain"
+                    className="w-1/2 object-contain mx-auto"
                   />
                 </div>
                 <div className="p-2 sm:p-3">
