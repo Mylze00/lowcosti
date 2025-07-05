@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React, { useState, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, Heart, ChevronDown } from 'lucide-react';
@@ -40,7 +39,7 @@ function Header() {
           </Link>
         </div>
 
-        {/* Recherche (desktop) */}
+        {/* Barre de recherche (desktop) */}
         <form
           onSubmit={handleSearchSubmit}
           className="flex-grow mx-4 max-w-xl hidden md:flex md:order-2"
@@ -60,7 +59,7 @@ function Header() {
           </button>
         </form>
 
-        {/* Menu utilisateur & icônes */}
+        {/* Menu utilisateur & icônes (desktop) */}
         <nav className="hidden sm:flex items-center space-x-4 md:order-3">
           <Link to="/cart" className="relative hover:text-blue-200">
             <ShoppingCart className="h-6 w-6" />
@@ -104,7 +103,6 @@ function Header() {
                       </Link>
                     )}
                   </Menu.Item>
-
                   <Menu.Item>
                     {({ active }) => (
                       <Link
@@ -118,7 +116,6 @@ function Header() {
                       </Link>
                     )}
                   </Menu.Item>
-
                   <Menu.Item>
                     {({ active }) => (
                       <button
@@ -143,7 +140,7 @@ function Header() {
         </nav>
       </div>
 
-      {/* Recherche (mobile) */}
+      {/* Barre de recherche (mobile) */}
       <form onSubmit={handleSearchSubmit} className="mt-2 w-full md:hidden px-4">
         <input
           type="text"
@@ -159,6 +156,36 @@ function Header() {
           Rechercher
         </button>
       </form>
+
+      {/* Icônes mobile (visible uniquement sur petit écran) */}
+      <nav className="flex sm:hidden justify-around mt-4 text-white">
+        <Link to="/cart" className="relative" aria-label="Panier">
+          <ShoppingCart className="h-6 w-6" />
+          {getCartItemCount() > 0 && (
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">
+              {getCartItemCount()}
+            </span>
+          )}
+        </Link>
+
+        <Link to="/wishlist" aria-label="Souhaits">
+          <Heart className="h-6 w-6" />
+        </Link>
+
+        {user ? (
+          <Link to="/profile" aria-label="Mon profil">
+            <img
+              src={user.photoURL || '/default-avatar.png'}
+              alt="Avatar"
+              className="h-6 w-6 rounded-full border-2 border-white"
+            />
+          </Link>
+        ) : (
+          <Link to="/login" className="text-sm">
+            Connexion
+          </Link>
+        )}
+      </nav>
     </header>
   );
 }
