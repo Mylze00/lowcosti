@@ -1,8 +1,8 @@
 // src/firebase.js
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore"; // ✅ Ajout Firestore
 
-// Configuration de ton projet Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDcr2phTCJKrSpDruELaIgPsJb-MSBg72w",
   authDomain: "lowcosti.firebaseapp.com",
@@ -13,8 +13,7 @@ const firebaseConfig = {
   measurementId: "G-RLF6BHB7F8"
 };
 
-// Initialisation de Firebase
 const app = initializeApp(firebaseConfig);
 
-// Auth Firebase
 export const auth = getAuth(app);
+export const db = getFirestore(app); // ✅ Export Firestore

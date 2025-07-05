@@ -11,10 +11,10 @@ import {
   signInWithPhoneNumber,
   RecaptchaVerifier,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
-
 export function useAuth() {
   return useContext(AuthContext);
 }
@@ -22,16 +22,38 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
 
+  // Sauvegarde dans Firestore
+  const saveUserToFirestore = async (userData) => {
+    if (!userData?.uid) return;
+
+    const userRef = doc(db, "users", userData.uid);
+    const docSnap = await getDoc(userRef);
+
+    if (!docSnap.exists()) {
+      await setDoc(userRef, {
+        uid: userData.uid,
+        email: userData.email || null,
+        displayName: userData.displayName || null,
+        photoURL: userData.photoURL || null,
+        phoneNumber: userData.phoneNumber || null,
+        createdAt: new Date(),
+      });
+    }
+  };
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        await saveUserToFirestore(currentUser);
+      }
+    });
     return () => unsubscribe();
   }, []);
 
-  // Fournisseurs
   const googleProvider = new GoogleAuthProvider();
   const facebookProvider = new FacebookAuthProvider();
 
-  // Méthodes
   const loginWithGoogle = () => signInWithPopup(auth, googleProvider);
   const loginWithFacebook = () => signInWithPopup(auth, facebookProvider);
   const logout = () => signOut(auth);
@@ -39,8 +61,11 @@ export function AuthProvider({ children }) {
   const loginWithEmail = (email, password) =>
     signInWithEmailAndPassword(auth, email, password);
 
-  const registerWithEmail = (email, password) =>
-    createUserWithEmailAndPassword(auth, email, password);
+  const registerWithEmail = async (email, password) => {
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await saveUserToFirestore(result.user); // ✅ Enregistre
+    return result;
+  };
 
   const loginWithPhone = async (phoneNumber, appVerifier) =>
     signInWithPhoneNumber(auth, phoneNumber, appVerifier);
@@ -49,7 +74,7 @@ export function AuthProvider({ children }) {
     window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
       size: "invisible",
       callback: (response) => {
-        console.log("reCAPTCHA resolved");
+        console.log("reCAPTCHA résolu");
       },
     });
     return window.recaptchaVerifier;
