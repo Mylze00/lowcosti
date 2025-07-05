@@ -89,7 +89,7 @@ function VenteShow() {
                   <img
                     src={auction.imageUrl}
                     alt={auction.productName}
-                    className="w-1/2 object-contain mx-auto"
+                    className="w-[45%] h-auto object-contain mx-auto"
                   />
                 </div>
                 <div className="p-2 sm:p-3">
