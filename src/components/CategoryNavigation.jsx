@@ -1,13 +1,14 @@
+// src/components/CategoryNavigation.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const categories = [
-  { id: 'phones', name: 'Téléphones', iconUrl: '/images/categories/phones.png' },
-  { id: 'fashion', name: 'Mode', iconUrl: '/images/categories/fashion.png' },
-  { id: 'electronics', name: 'Électronique', iconUrl: '/images/categories/electronics.png' },
-  { id: 'home', name: 'Maison', iconUrl: '/images/categories/home.png' },
-  { id: 'used', name: 'Occasion', iconUrl: '/images/categories/used.png' },
-  { id: 'pawn', name: 'Gage', iconUrl: '/images/categories/pawn.png' },
+  { id: 'phones', name: 'Téléphones', imageUrl: '/images/categories/phones.png' },
+  { id: 'fashion', name: 'Mode', imageUrl: '/images/categories/fashion.png' },
+  { id: 'electronics', name: 'Électronique', imageUrl: '/images/categories/electronics.png' },
+  { id: 'home', name: 'Maison', imageUrl: '/images/categories/home.png' },
+  { id: 'used', name: 'Occasion', imageUrl: '/images/categories/used.png' },
+  { id: 'pawn', name: 'Gage', imageUrl: '/images/categories/pawn.png' },
 ];
 
 function CategoryNavigation() {
@@ -19,28 +20,36 @@ function CategoryNavigation() {
           <Link
             key={category.id}
             to={`/category/${category.id}`}
-            className="flex-shrink-0 flex flex-col items-center text-center text-blue-800 hover:text-blue-600 transition-colors"
+            className="flex-shrink-0 flex flex-col items-center text-center w-20"
           >
-            <div className="w-16 h-16 rounded-full bg-white border border-gray-300 flex items-center justify-center mb-2">
-              <img src={category.iconUrl} alt={category.name} className="w-8 h-8 object-contain" />
+            <div className="w-20 h-20 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-sm">
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                className="object-contain w-16 h-16"
+              />
             </div>
-            <span className="text-xs font-medium">{category.name}</span>
+            <span className="text-xs font-medium text-gray-700 mt-2">{category.name}</span>
           </Link>
         ))}
       </div>
 
-      {/* Desktop : grille classique */}
-      <div className="hidden sm:grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6 justify-items-center mt-4">
+      {/* Desktop/Tablette : grille fixe */}
+      <div className="hidden sm:grid grid-cols-3 md:grid-cols-6 gap-6 justify-items-center mt-4">
         {categories.map((category) => (
           <Link
             key={category.id}
             to={`/category/${category.id}`}
-            className="flex flex-col items-center text-center text-blue-800 hover:text-blue-600 transition-colors"
+            className="flex flex-col items-center text-center"
           >
-            <div className="w-20 h-20 rounded-full bg-white border border-gray-300 flex items-center justify-center mb-2">
-              <img src={category.iconUrl} alt={category.name} className="w-10 h-10 object-contain" />
+            <div className="w-24 h-24 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-sm">
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                className="object-contain w-20 h-20"
+              />
             </div>
-            <span className="text-sm font-medium">{category.name}</span>
+            <span className="text-sm font-medium text-gray-700 mt-2">{category.name}</span>
           </Link>
         ))}
       </div>
