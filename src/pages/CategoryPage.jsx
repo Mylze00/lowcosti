@@ -1,41 +1,83 @@
-// src/pages/CategoryPage.jsx
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import products from '../data/products';
+import { Link } from 'react-router-dom';
 
-function CategoryPage() {
-  const { categoryId } = useParams();
-  const filteredProducts = products.filter(
-    product => product.category.toLowerCase() === categoryId.toLowerCase()
-  );
+const categories = [
+  {
+    id: 'phones',
+    name: 'Téléphones',
+    imageUrl: '/images/categories/telephones.png',
+  },
+  {
+    id: 'fashion',
+    name: 'Mode',
+    imageUrl: '/images/categories/mode.png',
+  },
+  {
+    id: 'electronics',
+    name: 'Électronique',
+    imageUrl: '/images/categories/electronique.png',
+  },
+  {
+    id: 'home',
+    name: 'Maison',
+    imageUrl: '/images/categories/maison.png',
+  },
+  {
+    id: 'occasion',
+    name: 'Occasion',
+    imageUrl: '/images/categories/occasion.png',
+  },
+  {
+    id: 'gage',
+    name: 'Gage',
+    imageUrl: '/images/categories/gage.png',
+  },
+];
 
+function CategoryNavigation() {
   return (
-    <div className="p-4">
-      <h2 className="text-2xl font-bold mb-4 capitalize">
-        Catégorie : {categoryId}
-      </h2>
+    <div className="bg-white py-4 px-4 shadow-sm">
+      {/* Version mobile : défilement horizontal */}
+      <div className="flex gap-4 overflow-x-auto sm:hidden scrollbar-hide">
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/category/${category.id}`}
+            className="flex-shrink-0 flex flex-col items-center text-center w-20"
+          >
+            <div className="w-16 h-16 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-sm">
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                className="object-contain w-10 h-10"
+              />
+            </div>
+            <span className="text-xs font-medium text-gray-700 mt-2">{category.name}</span>
+          </Link>
+        ))}
+      </div>
 
-      {filteredProducts.length === 0 ? (
-        <p>Aucun produit trouvé dans cette catégorie.</p>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {filteredProducts.map(product => (
-            <Link key={product.id} to={`/produit/${product.id}`}>
-              <div className="border p-4 rounded shadow hover:shadow-lg transition duration-200 bg-white">
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  className="w-full h-40 object-cover rounded"
-                />
-                <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
-                <p className="text-blue-600 font-bold">{product.price} $</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
+      {/* Version bureau/tablette : grille */}
+      <div className="hidden sm:grid grid-cols-3 md:grid-cols-6 gap-6 justify-items-center mt-4">
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            to={`/category/${category.id}`}
+            className="flex flex-col items-center text-center"
+          >
+            <div className="w-20 h-20 border border-gray-300 rounded-full overflow-hidden flex items-center justify-center bg-white shadow-sm">
+              <img
+                src={category.imageUrl}
+                alt={category.name}
+                className="object-contain w-12 h-12"
+              />
+            </div>
+            <span className="text-sm font-medium text-gray-700 mt-2">{category.name}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
 
-export default CategoryPage;
+export default CategoryNavigation;
