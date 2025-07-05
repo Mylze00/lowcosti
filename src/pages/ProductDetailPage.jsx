@@ -2,8 +2,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-
-import products from '../data/products'; // <-- NOUVELLE LIGNE : Importe les produits depuis le fichier centralisé
+import products from '../data/products'; // Importe les produits depuis le fichier centralisé
 
 function ProductDetailPage() {
   const { id } = useParams();
@@ -24,7 +23,9 @@ function ProductDetailPage() {
   return (
     <div className="p-4 mt-4 mx-auto max-w-4xl bg-white rounded-lg shadow-md">
       <Link to="/" className="inline-flex items-center text-blue-600 hover:underline mb-4">
-        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
         Retour à l'accueil
       </Link>
 

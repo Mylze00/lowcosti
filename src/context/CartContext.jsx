@@ -8,13 +8,7 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  // Retirez les console.log de débogage pour le moment
-  // console.log("Current cart items state (initial/re-render):", cartItems);
-
   const addToCart = (product, quantity = 1) => {
-    // Retirez les console.log de débogage pour le moment
-    // console.log("Attempting to add product:", product, "with quantity:", quantity);
-
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.productId === product.id);
       let newItems;
@@ -33,18 +27,15 @@ export const CartProvider = ({ children }) => {
           quantity 
         }];
       }
-      // Retirez les console.log de débogage pour le moment
-      // console.log("Cart items AFTER update:", newItems);
       return newItems;
     });
-    alert(`${product.name} a été ajouté au panier !`); // Confirmation visuelle
+    alert(`${product.name} a été ajouté au panier !`);
   };
 
   const getCartItemCount = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
-  // Le "value" prop contient les données et fonctions que les composants consommateurs pourront utiliser
   const contextValue = {
     cartItems,
     addToCart,
@@ -53,7 +44,7 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider value={contextValue}>
-      {children} {/* Permet aux composants enfants d'accéder au contexte */}
+      {children}
     </CartContext.Provider>
   );
 };
@@ -62,7 +53,6 @@ export const CartProvider = ({ children }) => {
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
-    // Si ce message d'erreur s'affiche, c'est que useCart n'est PAS utilisé à l'intérieur de CartProvider
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;

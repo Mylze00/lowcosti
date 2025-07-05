@@ -14,8 +14,8 @@ function AuctionOfferZone() {
   // 1. Utilisez useState pour gérer l'état du temps restant
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
-  // Fonction pour calculer le temps restant (légèrement modifiée)
-  function calculateTimeLeft() { // Changé en fonction normale pour faciliter l'appel
+  // Fonction pour calculer le temps restant
+  function calculateTimeLeft() {
     const difference = +new Date(currentAuction.endTime) - +new Date();
     let remaining = {};
 
@@ -32,21 +32,17 @@ function AuctionOfferZone() {
 
   // 2. Utilisez useEffect pour mettre à jour le temps chaque seconde
   useEffect(() => {
-    // Créez un intervalle qui met à jour le temps restant toutes les 1000 ms (1 seconde)
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    // Fonction de nettoyage : s'exécute lorsque le composant est démonté
-    // pour éviter les fuites de mémoire (très important !)
     return () => clearInterval(timer);
-  }, []); // Le tableau vide [] signifie que cet effet ne s'exécute qu'une fois au montage du composant
+  }, []);
 
   const timerComponents = [];
   Object.keys(timeLeft).forEach((interval) => {
-    if (!timeLeft[interval]) {
-      return;
-    }
+    if (!timeLeft[interval]) return;
+
     timerComponents.push(
       <span key={interval} className="text-xl font-bold mx-1">
         {timeLeft[interval] < 10 ? '0' + timeLeft[interval] : timeLeft[interval]}{interval.charAt(0)}

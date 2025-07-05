@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { ShoppingCart } from 'lucide-react';
 
-import allProducts from '../data/products'; // Assurez-vous que le chemin est correct
+import allProducts from '../data/products'; // Vérifie bien que ce chemin existe
 
 function ProductGrid() {
   const { addToCart } = useCart();
@@ -12,44 +12,32 @@ function ProductGrid() {
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
 
   useEffect(() => {
-    // --- NOUVEAUX CONSOLE.LOG POUR LE DÉBOGAGE ---
-    console.log("1. location.search:", location.search); // Vérifie le paramètre brut de l'URL
     const query = new URLSearchParams(location.search).get('q');
-    console.log("2. Query param 'q':", query); // Vérifie le terme de recherche extrait
 
     if (query) {
       const lowerCaseQuery = query.toLowerCase();
-      console.log("3. Lower case query:", lowerCaseQuery); // Vérifie le terme en minuscules
-
-      const results = allProducts.filter(product => {
-        const match = 
-          product.name.toLowerCase().includes(lowerCaseQuery) ||
-          product.description.toLowerCase().includes(lowerCaseQuery) ||
-          product.seller.toLowerCase().includes(lowerCaseQuery) ||
-          product.location.toLowerCase().includes(lowerCaseQuery);
-        // --- CONSOLE.LOG POUR CHAQUE PRODUIT PENDANT LE FILTRAGE ---
-        // console.log(`  - Checking product: ${product.name}, Match: ${match}`);
-        return match;
-      });
-      console.log("4. allProducts (content):", allProducts); // Vérifie le contenu de base de tous les produits
-      console.log("5. Filtered results:", results); // Vérifie le résultat du filtre
-
+      const results = allProducts.filter(product =>
+        product.name.toLowerCase().includes(lowerCaseQuery) ||
+        product.description.toLowerCase().includes(lowerCaseQuery) ||
+        product.seller.toLowerCase().includes(lowerCaseQuery) ||
+        product.location.toLowerCase().includes(lowerCaseQuery)
+      );
       setFilteredProducts(results);
     } else {
-      console.log("6. No query, showing all products.");
       setFilteredProducts(allProducts);
     }
   }, [location.search]);
 
-  // Reste du code du composant ProductGrid...
   return (
     <section className="container mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
         {new URLSearchParams(location.search).get('q') ? 'Résultats de la recherche' : 'Nos Derniers Produits'}
       </h2>
+
       {filteredProducts.length === 0 && (
         <p className="text-center text-gray-600 text-lg">Aucun produit trouvé pour votre recherche.</p>
       )}
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {filteredProducts.map(product => (
           <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg">

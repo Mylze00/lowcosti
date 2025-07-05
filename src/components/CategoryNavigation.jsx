@@ -1,34 +1,38 @@
 // src/components/CategoryNavigation.jsx
 import React from 'react';
-import { Shirt, Book, Coffee, Car, Laptop } from 'lucide-react'; // Assurez-vous que toutes ces icônes sont là
+import { Link } from 'react-router-dom';
+import { Smartphone, Shirt, Tv, Home } from 'lucide-react'; // Icônes lucide-react
+
+const categories = [
+  { id: 'phones', name: 'Téléphones', icon: Smartphone },
+  { id: 'fashion', name: 'Mode', icon: Shirt },
+  { id: 'electronics', name: 'Électronique', icon: Tv },
+  { id: 'home', name: 'Maison', icon: Home },
+  // Ajoute d'autres catégories ici
+];
 
 function CategoryNavigation() {
-  const categories = [
-    { name: "Mode", icon: Shirt },
-    { name: "Livres", icon: Book },
-    { name: "Électronique", icon: Laptop }, // Laptop est défini ici
-    { name: "Maison", icon: Coffee },
-    { name: "Véhicules", icon: Car },
-  ];
-
   return (
-    <div className="bg-white py-4 shadow-sm">
-      <div className="container mx-auto px-4">
-        <h2 className="text-xl font-bold text-gray-800 mb-4 text-center">Parcourir par Catégorie</h2>
-        <div className="flex justify-center flex-wrap gap-4 md:gap-6">
-          {categories.map((category) => (
-            <div
-              key={category.name}
-              className="flex flex-col items-center p-3 rounded-lg hover:bg-blue-50 transition-colors duration-200 cursor-pointer text-center"
+    <div className="bg-white py-6 px-4 shadow-sm">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6 justify-items-center">
+        {categories.map((category) => {
+          const Icon = category.icon;
+          return (
+            <Link
+              key={category.id}
+              to={`/category/${category.id}`}
+              className="flex flex-col items-center text-center text-blue-800 hover:text-blue-600 transition-colors"
             >
-              {category.icon && <category.icon className="h-8 w-8 text-blue-600 mb-2" />}
-              <span className="text-sm font-medium text-gray-700">{category.name}</span>
-            </div>
-          ))}
-        </div>
+              <div className="bg-blue-100 p-4 rounded-full mb-2 flex items-center justify-center">
+                <Icon className="w-6 h-6" />
+              </div>
+              <span className="text-sm font-medium">{category.name}</span>
+            </Link>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-export default CategoryNavigation; // <-- CETTE LIGNE EST CRUCIALE ET DOIT ÊTRE PRÉSENTE !
+export default CategoryNavigation;
