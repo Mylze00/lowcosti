@@ -16,7 +16,7 @@ function HeroCarousel() {
   return (
     <div className="p-4 bg-gray-100">
       {/* Flex container to display items side by side on all screen sizes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="flex flex-wrap gap-4">
         {/* First Banner Section with Adjusted Image Size */}
         <div className="w-full sm:w-1/2 h-[300px]">
           <Swiper
