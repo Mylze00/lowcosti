@@ -15,39 +15,27 @@ const banners = [
 function HeroCarousel() {
   return (
     <div className="p-4 bg-gray-100">
-      {/* Flex container to display items side by side on mobile screens */}
-      <div className="flex flex-wrap gap-4">
-        {/* First Column - Banner with Image (Carrousel) */}
-        <div className="w-full sm:w-1/2 h-[300px]">
-          <Swiper
-            spaceBetween={30}
-            centeredSlides={true}
-            autoplay={{ delay: 3500, disableOnInteraction: false }}
-            pagination={{ clickable: true }}
-            navigation={true}
-            modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper rounded-lg shadow-md h-full"
-          >
-            {banners.map((banner) => (
-              <SwiperSlide key={banner.id}>
-                <img
-                  src={banner.image}
-                  alt={banner.alt}
-                  className="w-full h-full object-cover rounded-lg"
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-
-        {/* Second Column - Static Image (JPG) */}
-        <div className="w-full sm:w-1/2 h-[300px] bg-white p-4 rounded-lg shadow-md flex items-center justify-center">
-          <img
-            src="/images/votre-image-fixe.jpg" // 👈 REMPLACEZ CECI par le chemin de votre image JPG
-            alt="Description de l'image fixe"
-            className="w-full h-full object-cover rounded-lg"
-          />
-        </div>
+      {/* Flex container for the carrousel */}
+      <div className="w-full h-[300px]">
+        <Swiper
+          spaceBetween={30}
+          centeredSlides={true}
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
+          pagination={{ clickable: true }}
+          navigation={true}
+          modules={[Autoplay, Pagination, Navigation]}
+          className="mySwiper rounded-lg shadow-md h-full"
+        >
+          {banners.map((banner) => (
+            <SwiperSlide key={banner.id}>
+              <img
+                src={banner.image}
+                alt={banner.alt}
+                className="w-full h-full object-cover rounded-lg"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   );
