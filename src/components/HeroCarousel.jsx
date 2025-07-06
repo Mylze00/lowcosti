@@ -15,7 +15,7 @@ const banners = [
 function HeroCarousel() {
   return (
     <div className="p-4 bg-gray-100">
-      {/* Flex container for the mobile screen with 2 equal columns */}
+      {/* Flex container to display items side by side on mobile screens */}
       <div className="flex flex-wrap gap-4">
         {/* First Column - Banner with Image (Carrousel) */}
         <div className="w-full sm:w-1/2 h-[300px]">
@@ -40,7 +40,7 @@ function HeroCarousel() {
           </Swiper>
         </div>
 
-{/* Second Column - Image fixe JPG */}
+        {/* Second Column - Static Image (JPG) */}
         <div className="w-full sm:w-1/2 h-[300px] bg-white p-4 rounded-lg shadow-md flex items-center justify-center">
           <img
             src="/images/votre-image-fixe.jpg" // 👈 REMPLACEZ CECI par le chemin de votre image JPG
