@@ -1,15 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import CartItem from '../components/CartItem';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Panier() {
   const { cartItems } = useCart();
+  const { user } = useAuth();
 
   const totalPrice = cartItems.reduce(
     (total, item) => total + item.quantity * item.price,
     0
   );
+
+  // Charger le script Flutterwave une fois
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://checkout.flutterwave.com/v3.js';
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const handlePayment = () => {
+    if (!window.FlutterwaveCheckout) return alert('Paiement indisponible');
+
+    window.FlutterwaveCheckout({
+      public_key: 'FLWPUBK_TEST-xxxxxxxxxxxxxxxxxxxx-X', // Remplace avec ta vraie clé publique
+      tx_ref: `tx-${Date.now()}`,
+      amount: totalPrice,
+      currency: 'USD',
+      payment_options: 'card,mobilemoney,ussd',
+      customer: {
+        email: user?.email || 'client@example.com',
+        name: user?.displayName || 'Client',
+        phone_number: '243812345678', // facultatif
+      },
+      callback: (data) => {
+        console.log('Paiement terminé ✅', data);
+        alert('Paiement effectué avec succès !');
+        // Ici : vider le panier, enregistrer la commande dans Firestore, etc.
+      },
+      customizations: {
+        title: 'LowCost RDC',
+        description: 'Paiement sécurisé',
+        logo: '/images/logo.png',
+      },
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-6">
@@ -41,7 +81,10 @@ function Panier() {
                 <span>Total :</span>
                 <span>{totalPrice.toFixed(2)} USD</span>
               </div>
-              <button className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm">
+              <button
+                onClick={handlePayment}
+                className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm"
+              >
                 Procéder au paiement
               </button>
             </div>
