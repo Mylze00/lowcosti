@@ -1,12 +1,31 @@
 // src/context/CartContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useAuth } from './AuthContext'; // Assurez-vous que ce fichier existe et expose user
 
-// 1. Créez le contexte
 export const CartContext = createContext();
 
-// 2. Créez un fournisseur de contexte (Provider)
 export const CartProvider = ({ children }) => {
+  const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
+
+  // Restaurer le panier depuis localStorage à la connexion
+  useEffect(() => {
+    if (user?.uid) {
+      const storedCart = localStorage.getItem(`cart_${user.uid}`);
+      if (storedCart) {
+        setCartItems(JSON.parse(storedCart));
+      } else {
+        setCartItems([]);
+      }
+    }
+  }, [user]);
+
+  // Sauvegarder le panier à chaque changement (si utilisateur connecté)
+  useEffect(() => {
+    if (user?.uid) {
+      localStorage.setItem(`cart_${user.uid}`, JSON.stringify(cartItems));
+    }
+  }, [cartItems, user]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
@@ -19,17 +38,17 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
-        newItems = [...prevItems, { 
+        newItems = [...prevItems, {
           productId: product.id,
           name: product.name,
           price: product.price,
           imageUrl: product.imageUrl,
-          quantity 
+          quantity
         }];
       }
+      alert(`${product.name} a été ajouté au panier !`);
       return newItems;
     });
-    alert(`${product.name} a été ajouté au panier !`);
   };
 
   const getCartItemCount = () => {
@@ -49,7 +68,6 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-// 3. Créez un hook personnalisé pour faciliter l'utilisation du contexte
 export const useCart = () => {
   const context = useContext(CartContext);
   if (context === undefined) {
