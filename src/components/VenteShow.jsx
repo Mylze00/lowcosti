@@ -1,4 +1,3 @@
-// src/components/VenteShow.jsx
 import React, { useState, useEffect } from 'react';
 import { Clock3 } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -83,17 +82,22 @@ function VenteShow() {
               <Link
                 key={auction.id}
                 to={`/product/${auction.id}`}
-                className="flex-shrink-0 w-[70%] sm:w-40 bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
+                className="flex-shrink-0 w-[50%] sm:w-40 bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
               >
-                <div className="h-28 sm:h-32 rounded-t-lg overflow-hidden flex items-center justify-center bg-gray-100">
+                {/* Zone image avec fond blanc */}
+                <div className="h-28 sm:h-32 rounded-t-lg overflow-hidden flex items-center justify-center bg-white">
                   <img
                     src={auction.imageUrl}
                     alt={auction.productName}
                     className="w-[45%] h-auto object-contain mx-auto"
                   />
                 </div>
+
+                {/* Détails du produit */}
                 <div className="p-2 sm:p-3">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">{auction.productName}</h4>
+                  <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
+                    {auction.productName}
+                  </h4>
                   <p className="text-[11px] text-gray-500 mb-1">
                     Actuel : {auction.currentBid}{auction.currency}
                   </p>
