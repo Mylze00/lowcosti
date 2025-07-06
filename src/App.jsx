@@ -1,10 +1,11 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Header from './components/Header';
 import HeroCarousel from './components/HeroCarousel';
 import CategoryNavigation from './components/CategoryNavigation';
-import VenteShow from './components/VenteShow'; // ✅ Nouveau composant renommé
+import VenteShow from './components/VenteShow';
 import ProductGrid from './components/ProductGrid';
 import BottomNavigationBar from './components/BottomNavigationBar';
 import FooterInfoSection from './components/FooterInfoSection';
@@ -16,6 +17,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/CategoryPage';
 import AddProductPage from './pages/AddProductPage';
+import Panier from './pages/Panier'; // ✅ Import ajouté ici
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -28,7 +30,7 @@ function HomePage() {
     <>
       <HeroCarousel />
       <CategoryNavigation />
-      <VenteShow /> {/* ✅ Affiche plusieurs produits en enchère horizontalement */}
+      <VenteShow />
       <ProductGrid />
     </>
   );
@@ -64,6 +66,7 @@ function App() {
               />
               <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/panier" element={<Panier />} /> {/* ✅ Route ajoutée */}
               <Route path="/categories/:categoryName" element={<CategoryPage />} />
               <Route path="/categories" element={<CategoryPage />} />
             </Routes>
