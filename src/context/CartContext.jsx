@@ -1,6 +1,6 @@
 // src/context/CartContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { useAuth } from './AuthContext'; // Assurez-vous que ce fichier existe et expose user
+import { useAuth } from './AuthContext';
 
 export const CartContext = createContext();
 
@@ -8,7 +8,7 @@ export const CartProvider = ({ children }) => {
   const { user } = useAuth();
   const [cartItems, setCartItems] = useState([]);
 
-  // Restaurer le panier depuis localStorage à la connexion
+  // Charger le panier à la connexion
   useEffect(() => {
     if (user?.uid) {
       const storedCart = localStorage.getItem(`cart_${user.uid}`);
@@ -20,13 +20,14 @@ export const CartProvider = ({ children }) => {
     }
   }, [user]);
 
-  // Sauvegarder le panier à chaque changement (si utilisateur connecté)
+  // Sauvegarder dans localStorage à chaque modification
   useEffect(() => {
     if (user?.uid) {
       localStorage.setItem(`cart_${user.uid}`, JSON.stringify(cartItems));
     }
   }, [cartItems, user]);
 
+  // Ajouter un article
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.productId === product.id);
@@ -51,6 +52,12 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Supprimer un article du panier
+  const removeFromCart = (productId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.productId !== productId));
+  };
+
+  // Compter les articles
   const getCartItemCount = () => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
@@ -58,6 +65,7 @@ export const CartProvider = ({ children }) => {
   const contextValue = {
     cartItems,
     addToCart,
+    removeFromCart,
     getCartItemCount,
   };
 
