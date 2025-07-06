@@ -15,10 +15,10 @@ const banners = [
 function HeroCarousel() {
   return (
     <div className="p-4 bg-gray-100">
-      {/* Flex container to split the section into two parts */}
+      {/* Flex container to display items side by side on all screen sizes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* First Banner Section */}
-        <div className="w-full sm:w-1/2">
+        {/* First Banner Section with Adjusted Image Size */}
+        <div className="w-full sm:w-1/2 h-[300px]">
           <Swiper
             spaceBetween={30}
             centeredSlides={true}
@@ -26,29 +26,31 @@ function HeroCarousel() {
             pagination={{ clickable: true }}
             navigation={true}
             modules={[Autoplay, Pagination, Navigation]}
-            className="mySwiper rounded-lg shadow-md"
+            className="mySwiper rounded-lg shadow-md h-full"
           >
             {banners.map((banner) => (
               <SwiperSlide key={banner.id}>
                 <img
                   src={banner.image}
                   alt={banner.alt}
-                  className="w-full h-[250px] object-cover rounded-lg"
+                  className="w-full h-full object-cover rounded-lg"
                 />
               </SwiperSlide>
             ))}
           </Swiper>
         </div>
 
-        {/* Second Banner Section with New Instructions */}
-        <div className="w-full sm:w-1/2 bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-center">Nouvelles Instructions</h2>
-          <p className="mt-2 text-lg">
-            Vous pouvez insérer ici de nouvelles informations, des promotions supplémentaires ou des
-            instructions spécifiques pour l'utilisateur. Cela pourrait être une mise en avant de produits,
-            des offres exclusives ou toute autre information importante que vous souhaitez partager.
-          </p>
-          <p className="mt-4 text-xl font-bold text-center">Profitez-en maintenant !</p>
+        {/* Second Section with Video */}
+        <div className="w-full sm:w-1/2 h-[300px] bg-white p-4 rounded-lg shadow-md flex items-center justify-center">
+          <video
+            className="w-full h-full object-cover rounded-lg"
+            controls
+            autoPlay
+            muted
+          >
+            <source src="/path/to/your-video.mp4" type="video/mp4" />
+            Votre navigateur ne supporte pas la vidéo.
+          </video>
         </div>
       </div>
     </div>
