@@ -41,7 +41,7 @@ function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
-          <div className="min-h-screen bg-gray-100 font-sans pb-16">
+          <div className="min-h-screen bg-gray-100 font-sans pb-16 flex flex-col"> {/* Ajout de flex ici */}
             <Header />
 
             <Routes>
@@ -74,7 +74,7 @@ function App() {
             <FooterInfoSection />
 
             <footer className="py-8 text-center text-gray-500 text-sm mt-auto">
-              © 2025 Mon Lowcosti RDC. Tous droits réservés.
+              © 2025 Mon Lowcost RDC. Tous droits réservés.
             </footer>
 
             <BottomNavigationBar />
