@@ -17,7 +17,7 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage';
 import CategoryPage from './pages/CategoryPage';
 import AddProductPage from './pages/AddProductPage';
-import Panier from './pages/Panier'; // ✅ Import ajouté ici
+import Panier from './pages/Panier';
 
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -41,32 +41,18 @@ function App() {
     <Router>
       <AuthProvider>
         <CartProvider>
-          <div className="min-h-screen bg-gray-100 font-sans pb-16 flex flex-col"> {/* Ajout de flex ici */}
+          <div className="min-h-screen bg-gray-100 font-sans pb-16 flex flex-col">
             <Header />
 
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-              <Route
-                path="/profile"
-                element={
-                  <PrivateRoute>
-                    <ProfilePage />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path="/add-product"
-                element={
-                  <PrivateRoute>
-                    <AddProductPage />
-                  </PrivateRoute>
-                }
-              />
+              <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+              <Route path="/add-product" element={<PrivateRoute><AddProductPage /></PrivateRoute>} />
               <Route path="/product/:id" element={<ProductDetailPage />} />
               <Route path="/cart" element={<CartPage />} />
-              <Route path="/panier" element={<Panier />} /> {/* ✅ Route ajoutée */}
+              <Route path="/panier" element={<Panier />} />
               <Route path="/categories/:categoryName" element={<CategoryPage />} />
               <Route path="/categories" element={<CategoryPage />} />
             </Routes>
