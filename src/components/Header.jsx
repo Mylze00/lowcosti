@@ -7,18 +7,18 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import { debounce } from 'lodash'; // Importer la fonction debounce de lodash
 
 function Header() {
   const { getCartItemCount } = useCart();
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
-
-  const navigate = useNavigate();
-
+  
   // Chargement des produits
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,18 +36,27 @@ function Header() {
     fetchProducts();
   }, []);
 
-  // Autocomplétion
-  useEffect(() => {
-    if (searchTerm.length > 0) {
+  // Fonction de recherche avec debounce pour limiter les appels rapides
+  const handleSearchChange = debounce((term) => {
+    if (term.length > 0) {
       const filtered = allProducts.filter(product =>
-        product.title?.toLowerCase().includes(searchTerm.toLowerCase())
+        product.title?.toLowerCase().includes(term.toLowerCase())
       );
-      setSuggestions(filtered.slice(0, 5));
+      setSuggestions(filtered.slice(0, 5)); // Limiter à 5 suggestions
     } else {
       setSuggestions([]);
     }
-  }, [searchTerm, allProducts]);
+  }, 300); // 300ms de délai avant d'exécuter la fonction
 
+  useEffect(() => {
+    if (searchTerm) {
+      handleSearchChange(searchTerm);
+    } else {
+      setSuggestions([]);
+    }
+  }, [searchTerm]);
+
+  // Soumettre la recherche
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
