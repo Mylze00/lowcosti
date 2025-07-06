@@ -87,8 +87,9 @@ function VenteShow() {
                   to={`/product/${auction.id}`}
                   className="w-full bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
                 >
-                  <div className="bg-white flex flex-col items-center p-2">
-                    <div className="h-24 sm:h-28 w-full flex items-center justify-center bg-gray-100 rounded">
+                  <div className="bg-white flex flex-col items-center p-2 rounded-lg">
+                    {/* Zone image avec fond blanc et coins arrondis */}
+                    <div className="h-24 sm:h-28 w-full flex items-center justify-center bg-white border border-gray-200 rounded-md shadow-sm">
                       <img
                         src={auction.imageUrl}
                         alt={auction.productName}
