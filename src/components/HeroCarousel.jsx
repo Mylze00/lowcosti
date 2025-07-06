@@ -10,6 +10,7 @@ import 'swiper/css/navigation';
 const banners = [
   { id: 1, image: '/images/banner-marketplace.webp', alt: 'Marketplace Congolaise' },
   { id: 2, image: '/images/banner-offres.webp', alt: 'Offres spéciales' },
+  { id: 3, image: '/images/banner3.webp', alt: 'Nouvelle promotion' }, // Chemin mis à jour
 ];
 
 function HeroCarousel() {
