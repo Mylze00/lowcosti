@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const sampleAuctions = [
   {
     id: 1,
-    productName: 'Smartphone X Pro Ultra',
+    productName: 'Smartphone X Pro',
     currentBid: 550,
     currency: '$',
     imageUrl: '/images/smartphone-enchere.webp',
