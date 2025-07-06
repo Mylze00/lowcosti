@@ -7,7 +7,6 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { debounce } from 'lodash'; // Importer la fonction debounce de lodash
 
 function Header() {
   const { getCartItemCount } = useCart();
@@ -17,6 +16,7 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
+
   const navigate = useNavigate();
 
   // Chargement des produits
@@ -36,25 +36,17 @@ function Header() {
     fetchProducts();
   }, []);
 
-  // Fonction de recherche avec debounce
-  const handleSearchChange = debounce((term) => {
-    if (term.length > 0) {
-      const filtered = allProducts.filter(product =>
-        product.title?.toLowerCase().includes(term.toLowerCase())
-      );
-      setSuggestions(filtered.slice(0, 5)); // Limiter à 5 suggestions
-    } else {
-      setSuggestions([]);
-    }
-  }, 300); // 300ms de délai
-
+  // Autocomplétion
   useEffect(() => {
-    if (searchTerm) {
-      handleSearchChange(searchTerm);
+    if (searchTerm.length > 0) {
+      const filtered = allProducts.filter(product =>
+        product.title?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSuggestions(filtered.slice(0, 5));
     } else {
       setSuggestions([]);
     }
-  }, [searchTerm]);
+  }, [searchTerm, allProducts]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -163,7 +155,7 @@ function Header() {
                   <Menu.Item>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                     >
                       Se déconnecter
                     </button>
