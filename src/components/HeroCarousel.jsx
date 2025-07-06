@@ -18,9 +18,13 @@ function HeroCarousel() {
       {/* Flex container for the carrousel */}
       <div className="w-full h-[300px]">
         <Swiper
-          spaceBetween={30}
+          spaceBetween={30} // Espace entre les diapositives
           centeredSlides={true}
-          autoplay={{ delay: 3500, disableOnInteraction: false }}
+          autoplay={{
+            delay: 3500, // Temps entre chaque slide (en ms)
+            disableOnInteraction: false, // Ne pas désactiver l'autoplay après interaction
+          }}
+          speed={1000} // Ralentir la vitesse du slide (en ms)
           pagination={{ clickable: true }}
           navigation={true}
           modules={[Autoplay, Pagination, Navigation]}
@@ -31,7 +35,7 @@ function HeroCarousel() {
               <img
                 src={banner.image}
                 alt={banner.alt}
-                className="w-full h-full object-cover rounded-lg"
+                className="w-full h-full object-fill rounded-lg" // Étire l'image pour remplir le cadre
               />
             </SwiperSlide>
           ))}
