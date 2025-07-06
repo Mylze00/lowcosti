@@ -6,11 +6,12 @@ import { Menu, Transition } from '@headlessui/react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase'; // 🔁 Assure-toi que l'import est correct
+import { db } from '../firebase';
 
 function Header() {
   const { getCartItemCount } = useCart();
   const { user, logout } = useAuth();
+
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
@@ -18,26 +19,30 @@ function Header() {
 
   const navigate = useNavigate();
 
-  // 🔄 Récupère les produits au chargement
+  // Chargement des produits
   useEffect(() => {
     const fetchProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, 'products'));
-      const products = querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setAllProducts(products);
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        const products = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setAllProducts(products);
+      } catch (error) {
+        console.error('Erreur chargement produits :', error);
+      }
     };
     fetchProducts();
   }, []);
 
-  // 🎯 Suggestions dynamiques
+  // Autocomplétion
   useEffect(() => {
     if (searchTerm.length > 0) {
       const filtered = allProducts.filter(product =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.title?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setSuggestions(filtered.slice(0, 5)); // limite à 5 suggestions
+      setSuggestions(filtered.slice(0, 5));
     } else {
       setSuggestions([]);
     }
@@ -46,15 +51,14 @@ function Header() {
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/?q=${searchTerm.trim()}`);
+      navigate(`/?q=${encodeURIComponent(searchTerm.trim())}`);
       setShowSearch(false);
     }
   };
 
   const handleSuggestionClick = (title) => {
     setSearchTerm(title);
-    navigate(`/?q=${title}`);
-    setSuggestions([]);
+    navigate(`/?q=${encodeURIComponent(title)}`);
     setShowSearch(false);
   };
 
@@ -66,14 +70,14 @@ function Header() {
   return (
     <header className="bg-primaryBlue text-white p-4 shadow-md relative z-50">
       <div className="container mx-auto flex items-center justify-between">
-        {/* Logo à gauche */}
+        {/* Logo */}
         <Link to="/" className="flex items-center">
           <img src="/images/logo.png" alt="LowCost RDC" className="h-14 w-auto" />
         </Link>
 
         {/* Icônes à droite */}
         <div className="flex items-center space-x-4">
-          {/* Recherche avec suggestions */}
+          {/* Icône de recherche */}
           <div className="relative">
             <button
               onClick={() => setShowSearch(!showSearch)}
@@ -113,7 +117,7 @@ function Header() {
           </div>
 
           {/* Panier */}
-          <Link to="/cart" className="relative hover:text-blue-200">
+          <Link to="/panier" className="relative hover:text-blue-200">
             <ShoppingCart className="h-6 w-6" />
             {getCartItemCount() > 0 && (
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
@@ -122,7 +126,7 @@ function Header() {
             )}
           </Link>
 
-          {/* Menu utilisateur ou Connexion */}
+          {/* Utilisateur connecté ou non */}
           {user ? (
             <Menu as="div" className="relative inline-block text-left">
               <Menu.Button className="hover:text-blue-200">
