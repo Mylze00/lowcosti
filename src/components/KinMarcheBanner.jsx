@@ -1,5 +1,5 @@
 // src/components/KinMarcheBanner.jsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const banners = [
   {
@@ -26,21 +26,50 @@ const banners = [
 ];
 
 function KinMarcheBanner() {
+  const [currentBanner, setCurrentBanner] = useState(0);
+
+  // Cycle through banners every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentBanner((prev) => (prev + 1) % banners.length);
+    }, 5000); // Change banner every 5 seconds
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="space-y-4 px-4 mt-4">
-      {banners.map((banner) => (
+    <div className="space-y-4 px-4 mt-4 flex gap-4">
+      {/* First Banner Section */}
+      <div className="w-1/2 space-y-4">
         <div
-          key={banner.id}
-          className="relative bg-cover bg-center h-48 rounded-lg shadow-md flex flex-col justify-center items-center text-white p-4"
-          style={{ backgroundImage: `url(${banner.image})` }}
+          key={banners[currentBanner].id}
+          className="relative bg-cover bg-center h-56 sm:h-72 rounded-lg shadow-lg flex flex-col justify-center items-center text-white p-4 transition-all duration-500"
+          style={{ backgroundImage: `url(${banners[currentBanner].image})` }}
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-center drop-shadow-lg">{banner.title}</h2>
-          <p className="text-xl sm:text-2xl font-semibold text-center mt-1 drop-shadow-lg">{banner.subtitle}</p>
-          <p className="text-lg sm:text-xl font-bold bg-blue-600 px-4 py-1 rounded-full mt-4 drop-shadow-lg">
-            {banner.promo}
+          <div className="absolute inset-0 bg-black bg-opacity-40 rounded-lg" />
+          <h2 className="text-3xl sm:text-4xl font-bold text-center text-shadow-xl">
+            {banners[currentBanner].title}
+          </h2>
+          <p className="text-xl sm:text-2xl font-semibold text-center mt-1 text-shadow-lg">
+            {banners[currentBanner].subtitle}
+          </p>
+          <p className="text-lg sm:text-xl font-bold bg-blue-600 px-4 py-1 rounded-full mt-4 text-center text-shadow-lg">
+            {banners[currentBanner].promo}
           </p>
         </div>
-      ))}
+      </div>
+
+      {/* Second Banner Section with New Instructions */}
+      <div className="w-1/2 space-y-4">
+        <div className="bg-gray-100 rounded-lg shadow-lg p-4">
+          <h2 className="text-2xl font-semibold text-center">Nouvelles Instructions</h2>
+          <p className="mt-2 text-lg">
+            Vous pouvez insérer ici de nouvelles informations, des promotions supplémentaires ou des
+            instructions spécifiques pour l'utilisateur. Cela pourrait être une mise en avant de produits,
+            des offres exclusives ou toute autre information importante que vous souhaitez partager.
+          </p>
+          <p className="mt-4 text-xl font-bold text-center">Profitez-en maintenant !</p>
+        </div>
+      </div>
     </div>
   );
 }
