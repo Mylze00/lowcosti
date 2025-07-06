@@ -79,42 +79,44 @@ function VenteShow() {
           {sampleAuctions.map((auction) => {
             const timer = timers[auction.id];
             return (
-              <Link
+              <div
                 key={auction.id}
-                to={`/product/${auction.id}`}
-                className="flex-shrink-0 w-[50%] sm:w-40 bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
+                className="flex-shrink-0 w-[35%] sm:w-40 flex justify-center"
               >
-                {/* Zone image avec fond blanc */}
-                <div className="h-28 sm:h-32 rounded-t-lg overflow-hidden flex items-center justify-center bg-white">
-                  <img
-                    src={auction.imageUrl}
-                    alt={auction.productName}
-                    className="w-[45%] h-auto object-contain mx-auto"
-                  />
-                </div>
+                <Link
+                  to={`/product/${auction.id}`}
+                  className="w-full bg-white rounded-lg shadow hover:shadow-md transition-shadow duration-200"
+                >
+                  <div className="bg-white flex flex-col items-center p-2">
+                    <div className="h-24 sm:h-28 w-full flex items-center justify-center bg-gray-100 rounded">
+                      <img
+                        src={auction.imageUrl}
+                        alt={auction.productName}
+                        className="w-[60%] h-auto object-contain"
+                      />
+                    </div>
 
-                {/* Détails du produit */}
-                <div className="p-2 sm:p-3">
-                  <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">
-                    {auction.productName}
-                  </h4>
-                  <p className="text-[11px] text-gray-500 mb-1">
-                    Actuel : {auction.currentBid}{auction.currency}
-                  </p>
-                  <div className="flex items-center text-[11px] text-red-600">
-                    <Clock3 className="h-4 w-4 mr-1" />
-                    {timer ? (
-                      <span>
-                        {String(timer.hours).padStart(2, '0')}h :
-                        {String(timer.minutes).padStart(2, '0')}m :
-                        {String(timer.seconds).padStart(2, '0')}s
-                      </span>
-                    ) : (
-                      <span>Terminé</span>
-                    )}
+                    <div className="mt-2 text-center">
+                      <h4 className="text-xs sm:text-sm font-bold text-gray-800 truncate">{auction.productName}</h4>
+                      <p className="text-[11px] text-gray-500 mb-1">
+                        Actuel : {auction.currentBid}{auction.currency}
+                      </p>
+                      <div className="flex items-center justify-center text-[11px] text-red-600">
+                        <Clock3 className="h-4 w-4 mr-1" />
+                        {timer ? (
+                          <span>
+                            {String(timer.hours).padStart(2, '0')}h :
+                            {String(timer.minutes).padStart(2, '0')}m :
+                            {String(timer.seconds).padStart(2, '0')}s
+                          </span>
+                        ) : (
+                          <span>Terminé</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>
