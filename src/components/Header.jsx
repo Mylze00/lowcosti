@@ -7,7 +7,15 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { debounce } from 'lodash'; // Importer la fonction debounce de lodash
+
+// ✅ Débounce custom sans lodash
+function debounce(func, wait) {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+}
 
 function Header() {
   const { getCartItemCount } = useCart();
@@ -18,7 +26,7 @@ function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
-  
+
   // Chargement des produits
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,7 +44,7 @@ function Header() {
     fetchProducts();
   }, []);
 
-  // Fonction de recherche avec debounce pour limiter les appels rapides
+  // Fonction de recherche avec debounce
   const handleSearchChange = debounce((term) => {
     if (term.length > 0) {
       const filtered = allProducts.filter(product =>
@@ -46,7 +54,7 @@ function Header() {
     } else {
       setSuggestions([]);
     }
-  }, 300); // 300ms de délai avant d'exécuter la fonction
+  }, 300);
 
   useEffect(() => {
     if (searchTerm) {
@@ -56,7 +64,6 @@ function Header() {
     }
   }, [searchTerm]);
 
-  // Soumettre la recherche
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (searchTerm.trim()) {
