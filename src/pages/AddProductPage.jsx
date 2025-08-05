@@ -1,14 +1,64 @@
 // src/pages/AddProductPage.jsx
 import React, { useState } from 'react';
+import { db, auth } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function AddProductPage() {
   const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleImageChange = (e) => {
+    const selected = Array.from(e.target.files).slice(0, 3); // Max 3 images
+    setImages(selected);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Produit ajouté : ${title} - ${price} $`);
-    // 🚧 Ici, tu ajouteras l'enregistrement dans Firestore
+    if (!auth.currentUser) {
+      alert("Vous devez être connecté pour ajouter un produit");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const storage = getStorage();
+      const imageUrls = [];
+
+      for (const image of images) {
+        const storageRef = ref(storage, `products/${Date.now()}-${image.name}`);
+        await uploadBytes(storageRef, image);
+        const url = await getDownloadURL(storageRef);
+        imageUrls.push(url);
+      }
+
+      await addDoc(collection(db, 'products'), {
+        title,
+        description,
+        category,
+        price: parseFloat(price),
+        images: imageUrls,
+        userId: auth.currentUser.uid,
+        createdAt: serverTimestamp(),
+      });
+
+      alert('Produit ajouté avec succès !');
+      setTitle('');
+      setDescription('');
+      setCategory('');
+      setPrice('');
+      setImages([]);
+    } catch (error) {
+      console.error('Erreur ajout produit:', error);
+      alert('Erreur lors de l’ajout du produit.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -23,6 +73,21 @@ function AddProductPage() {
           onChange={(e) => setTitle(e.target.value)}
           required
         />
+        <textarea
+          placeholder="Description"
+          className="w-full border px-4 py-2 rounded"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Catégorie"
+          className="w-full border px-4 py-2 rounded"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          required
+        />
         <input
           type="number"
           placeholder="Prix (USD)"
@@ -31,11 +96,19 @@ function AddProductPage() {
           onChange={(e) => setPrice(e.target.value)}
           required
         />
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageChange}
+          className="w-full"
+        />
         <button
           type="submit"
+          disabled={loading}
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
         >
-          Ajouter le produit
+          {loading ? 'Ajout en cours...' : 'Ajouter le produit'}
         </button>
       </form>
     </div>
