@@ -1,8 +1,8 @@
 // src/pages/AddProductPage.jsx
 import React, { useState } from 'react';
-import { db, auth } from '../firebase';
+import { db, auth, storage } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 function AddProductPage() {
   const [title, setTitle] = useState('');
@@ -13,7 +13,7 @@ function AddProductPage() {
   const [loading, setLoading] = useState(false);
 
   const handleImageChange = (e) => {
-    const selected = Array.from(e.target.files).slice(0, 3); // Max 3 images
+    const selected = Array.from(e.target.files).slice(0, 3);
     setImages(selected);
   };
 
@@ -27,13 +27,12 @@ function AddProductPage() {
     setLoading(true);
 
     try {
-      const storage = getStorage();
       const imageUrls = [];
 
       for (const image of images) {
-        const storageRef = ref(storage, `products/${Date.now()}-${image.name}`);
-        await uploadBytes(storageRef, image);
-        const url = await getDownloadURL(storageRef);
+        const fileRef = ref(storage, `products/${Date.now()}-${image.name}`);
+        await uploadBytes(fileRef, image);
+        const url = await getDownloadURL(fileRef);
         imageUrls.push(url);
       }
 
@@ -116,4 +115,3 @@ function AddProductPage() {
 }
 
 export default AddProductPage;
-  
